@@ -129,7 +129,7 @@ vision_tower = model.get_model().get_vision_tower()
 vision_tower.to(dtype=torch_dtype)
 
 if args.precision == "bf16":
-    model = model.bfloat16().cuda()
+    model = model.bfloat16()
 elif (
     args.precision == "fp16" and (not args.load_in_4bit) and (not args.load_in_8bit)
 ):
