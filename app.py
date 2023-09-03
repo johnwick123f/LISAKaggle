@@ -161,19 +161,19 @@ model.eval()
 examples = [
     [
         "Where can the driver see the car speed in this image? Please output segmentation mask.",
-        "./resources/imgs/example1.jpg",
+        "/kaggle/working/LISAKaggle/imgs/car_speed.jpg",
     ],
     [
         "Can you segment the food that tastes spicy and hot?",
-        "./resources/imgs/example2.jpg",
+        "/kaggle/working/LISAKaggle/imgs/car_speed.jpg",
     ],
     [
         "Assuming you are an autonomous driving robot, what part of the diagram would you manipulate to control the direction of travel? Please output segmentation mask and explain why.",
-        "./resources/imgs/example1.jpg",
+        "/kaggle/working/LISAKaggle/imgs/car_speed.jpg",
     ],
     [
         "What can make the woman stand higher? Please output segmentation mask and explain why.",
-        "./resources/imgs/example3.jpg",
+        "/kaggle/working/LISAKaggle/imgs/car_speed.jpg",
     ],
 ]
 output_labels = ["Segmentation Output"]
@@ -218,7 +218,7 @@ def inference(input_str, input_image):
         output_str = "[Error] Invalid input: ", input_str
         # output_image = np.zeros((128, 128, 3))
         ## error happened
-        output_image = cv2.imread("./resources/error_happened.png")[:, :, ::-1]
+        output_image = cv2.imread("/kaggle/working/LISAKaggle/imgs/car_speed.jpg")[:, :, ::-1]
         return output_image, output_str
 
     # Model Inference
