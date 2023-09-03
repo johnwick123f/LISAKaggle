@@ -118,6 +118,7 @@ elif args.load_in_8bit:
 model = LISAForCausalLM.from_pretrained(
     args.version, low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, **kwargs
 )
+model.save_pretrained("/kaggle/working/lisamodel")
 
 model.config.eos_token_id = tokenizer.eos_token_id
 model.config.bos_token_id = tokenizer.bos_token_id
