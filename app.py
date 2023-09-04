@@ -115,9 +115,9 @@ elif args.load_in_8bit:
         }
     )
 
-#model = LISAForCausalLM.from_pretrained(
-#    "/kaggle/working/lisamodel", low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, device_map="auto"
-#)
+model = LISAForCausalLM.from_pretrained(
+    "/kaggle/input/notebook2814a5b154/lisamodel/", low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, device_map="auto"
+)
 #model.save_pretrained("/kaggle/working/lisamodel")
 
 model.config.eos_token_id = tokenizer.eos_token_id
