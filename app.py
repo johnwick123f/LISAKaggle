@@ -115,9 +115,9 @@ elif args.load_in_8bit:
         }
     )
 
-model = LISAForCausalLM.from_pretrained(
-    "/kaggle/working/lisamodel", low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, device_map="auto"
-)
+#model = LISAForCausalLM.from_pretrained(
+#    "/kaggle/working/lisamodel", low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, device_map="auto"
+#)
 #model.save_pretrained("/kaggle/working/lisamodel")
 
 model.config.eos_token_id = tokenizer.eos_token_id
@@ -129,7 +129,7 @@ vision_tower = model.get_model().get_vision_tower()
 vision_tower.to(dtype=torch_dtype)
 
 if args.precision == "bf16":
-    model = model.bfloat16()
+    print("hello")
 elif (
     args.precision == "fp16" and (not args.load_in_4bit) and (not args.load_in_8bit)
 ):
