@@ -2,7 +2,7 @@ import argparse
 import os
 import re
 import sys
-
+from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
 import bleach
 import cv2
 import gradio as gr
@@ -248,6 +248,7 @@ def inference(input_str, input_image):
         .unsqueeze(0)
         .cuda()
     )
+    streamer = TextIteratorStreamer(tokenizer, skip_prompt=True, skip_special_tokens=True)
     if args.precision == "bf16":
         image_clip = image_clip.bfloat16()
     elif args.precision == "fp16":
@@ -282,14 +283,15 @@ def inference(input_str, input_image):
         original_size_list,
         max_new_tokens=512,
         tokenizer=tokenizer,
+        streamer=streamer,
     )
-    output_ids = output_ids[0][output_ids[0] != IMAGE_TOKEN_INDEX]
-
-    text_output = tokenizer.decode(output_ids, skip_special_tokens=False)
-    text_output = text_output.replace("\n", "").replace("  ", " ")
-    text_output = text_output.split("ASSISTANT: ")[-1]
-
-    print("text_output: ", text_output)
+    #output_ids = output_ids[0][output_ids[0] != IMAGE_TOKEN_INDEX]
+    #thread = Thread(target=model.generate, kwargs=generation_kwargs)
+    #thread.start()
+    gen = ""
+    #text_output = tokenizer.decode(output_ids, skip_special_tokens=False)
+    #text_output = text_output.replace("\n", "").replace("  ", " ")
+    #text_output = text_output.split("ASSISTANT: ")[-1]
     save_img = None
     for i, pred_mask in enumerate(pred_masks):
         if pred_mask.shape[0] == 0:
@@ -304,14 +306,18 @@ def inference(input_str, input_image):
             + pred_mask[:, :, None].astype(np.uint8) * np.array([255, 0, 0]) * 0.5
         )[pred_mask]
 
-    output_str = "ASSITANT: " + text_output  # input_str
+    output_str = "Assistant: " + text_output  # input_str
     if save_img is not None:
-        output_image = save_img  # input_image
+        output_image = save_img
+        for new_text in streamer:
+            gen += new_text
+            yield output_image, gen  # input_image
     else:
-        ## no seg output
-        output_image = cv2.imread("./resources/no_seg_out.png")[:, :, ::-1]
-    return output_image, output_str
-
+        output_image = cv2.imread("/kaggle/working/LISA/imgs/obama.jpg")[:, :, ::-1]
+    #return, output_image output_str
+        for new_text in streamer:
+            gen += new_text
+            yield output_image, gen
 
 demo = gr.Interface(
     inference,
