@@ -114,7 +114,7 @@ def main(args):
         )
 
     model = LISAForCausalLM.from_pretrained(
-        args.version, low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, **kwargs
+        args.version, low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, offload_folder="offload_1", offload_state_dict = True, **kwargs
     )
 
     model.config.eos_token_id = tokenizer.eos_token_id
