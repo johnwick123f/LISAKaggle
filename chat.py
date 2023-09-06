@@ -114,9 +114,9 @@ def main(args):
         )
 
     model = LISAForCausalLM.from_pretrained(
-        args.version, low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, offload_folder="offload_1", offload_state_dict = True, **kwargs
+        args.version, low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, offload_folder="/content/offload1", offload_state_dict = True, **kwargs
     )
-
+    model.save_pretrained('/content/pretrained_LISA_MODEL_13B', max_shard_size="1000MB")
     model.config.eos_token_id = tokenizer.eos_token_id
     model.config.bos_token_id = tokenizer.bos_token_id
     model.config.pad_token_id = tokenizer.pad_token_id
