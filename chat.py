@@ -18,7 +18,7 @@ from utils.utils import (DEFAULT_IM_END_TOKEN, DEFAULT_IM_START_TOKEN,
 
 def parse_args(args):
     parser = argparse.ArgumentParser(description="LISA chat")
-    parser.add_argument("--version", default="xinlai/LISA-13B-llama2-v1")
+    parser.add_argument("--version", default="xinlai/LISA-13B-llama2-v1-explanatory")
     parser.add_argument("--vis_save_path", default="./vis_output", type=str)
     parser.add_argument(
         "--precision",
@@ -69,7 +69,7 @@ def main(args):
 
     # Create model
     tokenizer = AutoTokenizer.from_pretrained(
-        args.version,
+        "xinlai/LISA-13B-llama2-v1-explanatory",
         cache_dir=None,
         model_max_length=args.model_max_length,
         padding_side="right",
@@ -114,9 +114,10 @@ def main(args):
         )
 
     model = LISAForCausalLM.from_pretrained(
-        args.version, low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, offload_folder="/content/offload1", offload_state_dict = True, **kwargs
+        "xinlai/LISA-13B-llama2-v1-explanatory", low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, offload_folder="/content/offload1", offload_state_dict = True, **kwargs
     )
-    model.save_pretrained('/content/pretrained_LISA_MODEL_13B', max_shard_size="1000MB")
+    model.push_to_hub("Lisa-13b-sharded-model")
+    tokenizer.push_to_hub("Lisa-13b-sharded-model")
     model.config.eos_token_id = tokenizer.eos_token_id
     model.config.bos_token_id = tokenizer.bos_token_id
     model.config.pad_token_id = tokenizer.pad_token_id
