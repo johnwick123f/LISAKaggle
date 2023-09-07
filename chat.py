@@ -116,8 +116,8 @@ def main(args):
     model = LISAForCausalLM.from_pretrained(
         "xinlai/LISA-13B-llama2-v1-explanatory", low_cpu_mem_usage=True, use_cache=True, seg_token_idx=args.seg_token_idx, max_shard_size="2000MB", offload_folder="/content/offload1", offload_state_dict = True, **kwargs
     )
-    model.push_to_hub("Lisa-13b-sharded-model")
-    tokenizer.push_to_hub("Lisa-13b-sharded-model")
+    #model.push_to_hub("Lisa-13b-sharded-model")
+    model.save_pretrained("/content/drive/MyDrive/LisaModel")
     model.config.eos_token_id = tokenizer.eos_token_id
     model.config.bos_token_id = tokenizer.bos_token_id
     model.config.pad_token_id = tokenizer.pad_token_id
