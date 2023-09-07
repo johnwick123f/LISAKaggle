@@ -153,8 +153,10 @@ def main(args):
     transform = ResizeLongestSide(args.image_size)
 
     model.eval()
+    a = None
 
-    while True:
+    if a is None:
+        print("apple")
         conv = conversation_lib.conv_templates[args.conv_type].copy()
         conv.messages = []
 
