@@ -114,7 +114,7 @@ def main(args):
         )
 
     model = LISAForCausalLM.from_pretrained(
-        "xinlai/LISA-13B-llama2-v1-explanatory", low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, offload_folder="/content/offload1", offload_state_dict = True, **kwargs
+        "xinlai/LISA-13B-llama2-v1-explanatory", low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, max_shard_size="2000MB", offload_folder="/content/offload1", offload_state_dict = True, **kwargs
     )
     model.push_to_hub("Lisa-13b-sharded-model")
     tokenizer.push_to_hub("Lisa-13b-sharded-model")
