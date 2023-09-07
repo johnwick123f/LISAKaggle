@@ -105,7 +105,6 @@ def main(args):
         kwargs.update(
             {
                 "torch_dtype": torch.half,
-                "device_map": "auto",
                 "quantization_config": BitsAndBytesConfig(
                     llm_int8_skip_modules=["visual_model"],
                     load_in_8bit=True,
