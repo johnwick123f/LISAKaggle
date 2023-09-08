@@ -108,6 +108,9 @@ def main(args):
                 "quantization_config": BitsAndBytesConfig(
                     llm_int8_skip_modules=["visual_model"],
                     load_in_8bit=True,
+                    bnb_8bit_use_double_quant=True,
+                    bnb_8bit_quant_type="nf4",
+                    bnb_8bit_compute_dtype=torch.bfloat16,
                     load_in_8bit_fp32_cpu_offload=True
                 ),
             }
