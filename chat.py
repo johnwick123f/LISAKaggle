@@ -104,11 +104,12 @@ def main(args):
     elif args.load_in_8bit:
         kwargs.update(
             {    
-                "device_map": "auto",
+                "device_map": "balanced",
                 "torch_dtype": torch.half,
                 "quantization_config": BitsAndBytesConfig(
                     llm_int8_skip_modules=["visual_model"],
                     load_in_8bit=True,
+                    load_in_8bit_fp32_cpu_offload=True
                 ),
             }
         )
