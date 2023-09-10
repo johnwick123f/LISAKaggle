@@ -118,9 +118,9 @@ def main(args):
         )
 
     model = LISAForCausalLM.from_pretrained(
-        "xinlai/LISA-13B-llama2-v1-explanatory", low_cpu_mem_usage=True, use_cache=True, seg_token_idx=args.seg_token_idx, offload_folder="offload1", **kwargs
+        "/kaggle/working/LISAMODEL", low_cpu_mem_usage=True, use_cache=True, seg_token_idx=args.seg_token_idx, offload_folder="offload1", **kwargs
     )
-    model.save_pretrained("/kaggle/working/LISAMODEL")
+    #model.save_pretrained("/kaggle/working/LISAMODEL")
     model.config.eos_token_id = tokenizer.eos_token_id
     model.config.bos_token_id = tokenizer.bos_token_id
     model.config.pad_token_id = tokenizer.pad_token_id
