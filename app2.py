@@ -96,7 +96,7 @@ if args.load_in_4bit:
             "load_in_4bit": True,
             "quantization_config": BitsAndBytesConfig(
                 load_in_4bit=True,
-                bnb_4bit_compute_dtype=torch.float16,
+                bnb_4bit_compute_dtype=torch.bfloat16,
                 bnb_4bit_use_double_quant=True,
                 bnb_4bit_quant_type="nf4",
                 llm_int8_skip_modules=["visual_model"],
@@ -116,7 +116,7 @@ elif args.load_in_8bit:
     )
 
 model = LISAForCausalLM.from_pretrained(
-    , low_cpu_mem_usage=True, seg_token_idx=args.seg_token_idx, **kwargs
+    "/kaggle/working/LISAMODEL", low_cpu_mem_usage=True, offload_folder="offload", seg_token_idx=args.seg_token_idx, **kwargs
 )
 
 model.config.eos_token_id = tokenizer.eos_token_id
@@ -138,7 +138,6 @@ elif (
 
     model_engine = deepspeed.init_inference(
         model=model,
-        dtype=torch.half,
         replace_with_kernel_inject=True,
         replace_method="auto",
     )
