@@ -72,7 +72,7 @@ os.makedirs(args.vis_save_path, exist_ok=True)
 
 # Create model
 tokenizer = AutoTokenizer.from_pretrained(
-    args.version,
+    "xinlai/LISA-13B-llama2-v1-explanatory",
     cache_dir=None,
     model_max_length=args.model_max_length,
     padding_side="right",
