@@ -350,6 +350,7 @@ class LISAForCausalLM(LlavaLlamaForCausalLM):
         original_size_list,
         max_new_tokens=32,
         tokenizer=None,
+        streamer
     ): 
         streamer = TextIteratorStreamer(tokenizer)
         with torch.no_grad():
