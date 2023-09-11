@@ -279,10 +279,10 @@ def inference(input_str, input_image):
         image,
         input_ids,
         resize_list,
+        streamer,
         original_size_list,
         max_new_tokens=512,
         tokenizer=tokenizer,
-        streamer=streamer
     ):
         print(output)
         save_img = None
