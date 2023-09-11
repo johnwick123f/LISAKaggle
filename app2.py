@@ -271,7 +271,8 @@ def inference(input_str, input_image):
 
     input_ids = tokenizer_image_token(prompt, tokenizer, return_tensors="pt")
     input_ids = input_ids.unsqueeze(0).cuda()
-   
+    from transformers import AutoModelForCausalLM, AutoTokenizer, TextIteratorStreamer
+    streamer = TextIteratorStreamer(tokenizer)
     for output, pred_masks in model.evaluate(
         image_clip,
         image,
@@ -280,6 +281,7 @@ def inference(input_str, input_image):
         original_size_list,
         max_new_tokens=512,
         tokenizer=tokenizer,
+        streamer=streamer
     ):
         print(output)
         save_img = None
