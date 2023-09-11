@@ -347,11 +347,10 @@ class LISAForCausalLM(LlavaLlamaForCausalLM):
         images,
         input_ids,
         resize_list,
-        streamer,
         original_size_list,
         max_new_tokens=32,
         tokenizer=None,
-    ): 
+    ):
         with torch.no_grad():
             outputs = self.generate(
                 images=images_clip,
@@ -360,7 +359,6 @@ class LISAForCausalLM(LlavaLlamaForCausalLM):
                 num_beams=1,
                 output_hidden_states=True,
                 return_dict_in_generate=True,
-                streamer=streamer
             )
             output_hidden_states = outputs.hidden_states[-1]
             output_ids = outputs.sequences
@@ -376,6 +374,7 @@ class LISAForCausalLM(LlavaLlamaForCausalLM):
             )
 
             hidden_states = []
+
             assert len(self.model.text_hidden_fcs) == 1
             hidden_states.append(self.model.text_hidden_fcs[0](output_hidden_states))
 
@@ -423,5 +422,5 @@ class LISAForCausalLM(LlavaLlamaForCausalLM):
                     original_size=original_size_list[i],
                 )
                 pred_masks.append(pred_mask[:, 0])
-                for output in streamer:
-                    yield output, pred_masks
+
+        return output_ids, pred_masks
