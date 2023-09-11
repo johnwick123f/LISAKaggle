@@ -96,7 +96,7 @@ if args.load_in_4bit:
 elif args.load_in_8bit:
     kwargs.update(
         {
-            "torch_dtype": torch.half,
+            "torch_dtype": torch.bfloat16,
             "device_map": "auto",
             "quantization_config": BitsAndBytesConfig(
                 llm_int8_skip_modules=["visual_model"],
@@ -117,7 +117,7 @@ tokenizer.pad_token = tokenizer.unk_token
 args.seg_token_idx = tokenizer("[SEG]", add_special_tokens=False).input_ids[0]
 
 model = LISAForCausalLM.from_pretrained(
-    "xinlai/LISA-13B-llama2-v1-explanatory", max_memory={0: "12GB", 1: "12GB", "cpu": "12GB"}, low_cpu_mem_usage=True, use_cache=True, offload_folder="offload", offload_state_dict=True, seg_token_idx=args.seg_token_idx, **kwargs
+    "xinlai/LISA-13B-llama2-v1-explanatory", low_cpu_mem_usage=True, use_cache=True, offload_folder="offload", offload_state_dict=True, seg_token_idx=args.seg_token_idx, **kwargs
 )
 model.save_pretrained("/kaggle/working/LISAMODEL", max_shard_size="2000MB")
 model.config.eos_token_id = tokenizer.eos_token_id
