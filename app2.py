@@ -319,4 +319,4 @@ demo = gr.Interface(
 )
 
 demo.queue()
-demo.launch()
+demo.launch(debug=True)
