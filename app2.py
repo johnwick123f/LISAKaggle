@@ -271,8 +271,8 @@ def inference(input_str, input_image):
 
     input_ids = tokenizer_image_token(prompt, tokenizer, return_tensors="pt")
     input_ids = input_ids.unsqueeze(0).cuda()
-
-    output_ids, pred_masks = model.evaluate(
+   
+    for output, pred_masks = model.evaluate(
         image_clip,
         image,
         input_ids,
@@ -280,35 +280,25 @@ def inference(input_str, input_image):
         original_size_list,
         max_new_tokens=512,
         tokenizer=tokenizer,
-    )
-    output_ids = output_ids[0][output_ids[0] != IMAGE_TOKEN_INDEX]
-
-    text_output = tokenizer.decode(output_ids, skip_special_tokens=False)
-    text_output = text_output.replace("\n", "").replace("  ", " ")
-    text_output = text_output.split("ASSISTANT: ")[-1]
-
-    print("text_output: ", text_output)
-    save_img = None
-    for i, pred_mask in enumerate(pred_masks):
-        if pred_mask.shape[0] == 0:
-            continue
-
-        pred_mask = pred_mask.detach().cpu().numpy()[0]
-        pred_mask = pred_mask > 0
-
-        save_img = image_np.copy()
-        save_img[pred_mask] = (
-            image_np * 0.5
-            + pred_mask[:, :, None].astype(np.uint8) * np.array([255, 0, 0]) * 0.5
-        )[pred_mask]
-
-    output_str = "ASSITANT: " + text_output  # input_str
-    if save_img is not None:
-        output_image = save_img  # input_image
-    else:
-        ## no seg output
-        output_image = cv2.imread("/kaggle/working/LISAKaggle/imgs/dog_with_horn.jpg")[:, :, ::-1]
-    return output_image, output_str
+    ):
+        print(output)
+        save_img = None
+        for i, pred_mask in enumerate(pred_masks):
+            if pred_mask.shape[0] == 0:
+                continue
+            pred_mask = pred_mask.detach().cpu().numpy()[0]
+            pred_mask = pred_mask > 0
+            save_img = image_np.copy()
+            save_img[pred_mask] = (
+                image_np * 0.5
+                + pred_mask[:, :, None].astype(np.uint8) * np.array([255, 0, 0]) * 0.5
+            )[pred_mask]
+        output_str = "ASSISTANT: " + text_output  # input_str
+        if save_img is not None:
+            output_image = save_img  # input_image
+        else:
+            output_image = cv2.imread("/kaggle/working/LISAKaggle/imgs/dog_with_horn.jpg")[:, :, ::-1]
+        yield output_image, output
 
 
 demo = gr.Interface(
