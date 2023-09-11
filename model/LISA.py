@@ -347,12 +347,11 @@ class LISAForCausalLM(LlavaLlamaForCausalLM):
         images,
         input_ids,
         resize_list,
+        streamer,
         original_size_list,
         max_new_tokens=32,
         tokenizer=None,
-        streamer
     ): 
-        streamer = TextIteratorStreamer(tokenizer)
         with torch.no_grad():
             outputs = self.generate(
                 images=images_clip,
