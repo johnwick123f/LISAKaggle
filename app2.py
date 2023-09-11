@@ -91,7 +91,7 @@ kwargs = {"torch_dtype": torch_dtype}
 if args.load_in_4bit:
     kwargs.update(
         {
-            "torch_dtype": torch.half,
+            "torch_dtype": torch.bfloat16,
             "device_map": "auto",
             "load_in_4bit": True,
             "quantization_config": BitsAndBytesConfig(
