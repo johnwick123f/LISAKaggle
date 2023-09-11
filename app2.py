@@ -104,10 +104,6 @@ elif args.load_in_8bit:
             ),
         }
     )
-
-model = LISAForCausalLM.from_pretrained(
-    "/kaggle/working/LISAMODEL", low_cpu_mem_usage=True, offload_folder="offload", seg_token_idx=args.seg_token_idx, **kwargs
-)
 tokenizer = AutoTokenizer.from_pretrained(
     args.version,
     cache_dir=None,
@@ -118,6 +114,9 @@ tokenizer = AutoTokenizer.from_pretrained(
 tokenizer.pad_token = tokenizer.unk_token
 args.seg_token_idx = tokenizer("[SEG]", add_special_tokens=False).input_ids[0]
 
+model = LISAForCausalLM.from_pretrained(
+    "/kaggle/working/LISAMODEL", low_cpu_mem_usage=True, offload_folder="offload", seg_token_idx=args.seg_token_idx, **kwargs
+)
 model.config.eos_token_id = tokenizer.eos_token_id
 model.config.bos_token_id = tokenizer.bos_token_id
 model.config.pad_token_id = tokenizer.pad_token_id
